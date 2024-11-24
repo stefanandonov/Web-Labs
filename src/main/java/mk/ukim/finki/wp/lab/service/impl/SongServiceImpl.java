@@ -24,11 +24,27 @@ public class SongServiceImpl implements SongService {
 
     @Override
     public Artist addArtistToSong(Artist artist, Song song) {
-        return songRepository.addArtistToSong(artist,song);
+        return songRepository.addArtistToSong(artist, song);
     }
 
     @Override
     public Optional<Song> findByTrackId(String trackId) {
         return songRepository.findByTrackId(trackId);
     }
+
+    @Override
+    public void saveSong(Song song, Long albumId) {
+        songRepository.saveSong(song, albumId);
+    }
+
+    @Override
+    public Optional<Song> findById(Long songId) {
+        return songRepository.findById(songId);
+    }
+
+    @Override
+    public void deleteSongById(Long songId) {
+         songRepository.deleteSongById(songId);
+    }
+
 }
