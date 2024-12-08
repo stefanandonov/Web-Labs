@@ -42,7 +42,7 @@ public class ArtistController {
     @PostMapping("")
     protected String doPost(@RequestParam String trackId, @RequestParam String artistId, Model model) throws ServletException, IOException {
         Artist artist = artistService.findById(Long.parseLong(artistId));
-        songService.findByTrackId(trackId).ifPresent(song -> songService.addArtistToSong(artist, song));
+//        songService.findByTrackId(trackId).ifPresent(song -> songService.addArtistToSong(artist, song));
         return "redirect:/songDetails?trackId=" + trackId;
     }
 }

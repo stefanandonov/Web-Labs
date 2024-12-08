@@ -1,59 +1,27 @@
 package mk.ukim.finki.wp.lab.repository;
 
-import jakarta.annotation.PostConstruct;
-import mk.ukim.finki.wp.lab.bootstrap.DataHolder;
-import mk.ukim.finki.wp.lab.model.Album;
 import mk.ukim.finki.wp.lab.model.Artist;
 import mk.ukim.finki.wp.lab.model.Song;
-import mk.ukim.finki.wp.lab.service.AlbumService;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.xml.crypto.Data;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class SongRepository {
+public interface SongRepository extends JpaRepository<Song, Long> {
 
 
-    private final AlbumService albumService;
+    List<Song> findAll();
 
-    public SongRepository(AlbumService albumService) {
-        this.albumService = albumService;
-    }
+//     Artist addArtistToSong(Artist artist, Song song);
 
-    public List<Song> findAll() {
-        return DataHolder.songs;
-    }
+    List<Song> findAllByAlbum_Id(Long albumId);
 
-    public Optional<Song> findByTrackId(String trackId) {
-        return DataHolder.songs.stream().filter(song -> song.getTrackId().equals(trackId)).findFirst();
-    }
+    Optional<Song> findOneById(Long Id);
 
-    public Artist addArtistToSong(Artist artist, Song song) {
-        DataHolder.songs.stream().filter(tempSong -> tempSong.equals(song)).forEach(tempSong -> {
-            List<Artist> currentPerformers = tempSong.getPerformers();
-            currentPerformers.add(artist);
-            tempSong.setPerformers(currentPerformers);
-        });
-        return artist;
-    }
 
-    public void saveSong(Song song, Long albumId) {
-        DataHolder.songs.removeIf(song1 -> song1.getId().equals(song.getId()));
-        Album album = albumService.findOne(albumId);
-        song.setAlbum(album);
-        DataHolder.songs.add(song);
-
-    }
-
-    public Optional<Song> findById(Long songId) {
-
-        return DataHolder.songs.stream().filter(song -> song.getId().equals(songId)).findFirst();
-    }
-
-    public void deleteSongById(Long songId) {
-        DataHolder.songs.removeIf(song -> song.getId().equals(songId));
-    }
+    @Query("SELECT s from Song s where s.trackId = :trackId")
+    Optional<Song> findByTrackId(String trackId);
 }

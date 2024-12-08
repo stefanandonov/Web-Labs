@@ -1,7 +1,9 @@
 package mk.ukim.finki.wp.lab.service.impl;
 
-import mk.ukim.finki.wp.lab.model.Artist;
+import jakarta.transaction.Transactional;
+import mk.ukim.finki.wp.lab.model.Album;
 import mk.ukim.finki.wp.lab.model.Song;
+import mk.ukim.finki.wp.lab.repository.AlbumRepository;
 import mk.ukim.finki.wp.lab.repository.SongRepository;
 import mk.ukim.finki.wp.lab.service.SongService;
 import org.springframework.stereotype.Service;
@@ -12,9 +14,11 @@ import java.util.Optional;
 @Service
 public class SongServiceImpl implements SongService {
     public final SongRepository songRepository;
+    public final AlbumRepository albumRepository;
 
-    public SongServiceImpl(SongRepository songRepository) {
+    public SongServiceImpl(SongRepository songRepository, AlbumRepository albumRepository) {
         this.songRepository = songRepository;
+        this.albumRepository = albumRepository;
     }
 
     @Override
@@ -22,20 +26,14 @@ public class SongServiceImpl implements SongService {
         return songRepository.findAll();
     }
 
-    @Override
-    public Artist addArtistToSong(Artist artist, Song song) {
-        return songRepository.addArtistToSong(artist, song);
-    }
 
     @Override
+    @Transactional
     public Optional<Song> findByTrackId(String trackId) {
-        return songRepository.findByTrackId(trackId);
+        Optional<Song> song = songRepository.findByTrackId(trackId);
+        return song;
     }
 
-    @Override
-    public void saveSong(Song song, Long albumId) {
-        songRepository.saveSong(song, albumId);
-    }
 
     @Override
     public Optional<Song> findById(Long songId) {
@@ -44,7 +42,21 @@ public class SongServiceImpl implements SongService {
 
     @Override
     public void deleteSongById(Long songId) {
-         songRepository.deleteSongById(songId);
+        songRepository.deleteById(songId);
     }
+
+    @Override
+    public void saveSong(String trackId, String title, String genre, int releaseYear, Long songID, Long albumId) {
+        Album album = albumRepository.findById(albumId).orElse(null);
+        Song song = new Song(trackId, title, genre, releaseYear, album);
+        if (songID != null) song.setId(songID);
+        songRepository.save(song);
+    }
+
+    @Override
+    public List<Song> findByAlbumId(String albumId) {
+        return songRepository.findAllByAlbum_Id(Long.valueOf(albumId));
+    }
+
 
 }

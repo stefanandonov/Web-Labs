@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import mk.ukim.finki.wp.lab.model.Artist;
 import mk.ukim.finki.wp.lab.model.Song;
 import mk.ukim.finki.wp.lab.service.SongService;
@@ -39,6 +40,8 @@ public class SongDetailsServlet extends HttpServlet {
         List<Artist> artists = new ArrayList<>();
         if (song != null) {
             artists = song.getPerformers();
+        } else {
+            resp.sendRedirect("/songs");
         }
 
 

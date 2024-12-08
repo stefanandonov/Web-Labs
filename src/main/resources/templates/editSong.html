@@ -5,6 +5,7 @@
     <title>Title</title>
 </head>
 <body>
+
 <form th:action="'/songs/edit'" method="post">
     <input name="songID" type="hidden" th:value="${song.id}">
     <label for="title">Title:</label>
@@ -19,9 +20,9 @@
     <label for="releaseYear">Release Year:</label>
     <input type="text" id="releaseYear" name="releaseYear" th:value="${song.releaseYear}" required>
     <br><br>
-    <select id="albumId" name="albumId" th:value="${song.album.id}" required>
+    <select id="albumId" name="albumId" required>
         <option value="" disabled selected>Select an album</option>
-        <option th:each="album: ${albums}" th:value="${album.id}" th:text="${album.name}"></option>
+        <option th:each="album: ${albums}" th:value="${album.id}" th:text="${album.name}" th:attr="selected=${album.id == song.album.id}"></option>
     </select>
     <br><br>
     <button type="submit">Submit</button>

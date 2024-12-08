@@ -14,24 +14,24 @@
     <h1>Welcome to My Music Store</h1>
 </header>
 <main>
-    <div>
-        <form action="/listSongs" method="get">
-            <label>Filter</label>
-            <input type="text" name="songNameFilter"/>
-            <input type='submit' value='Submit'>
-        </form>
-    </div>
-    <h2>Choose a song:</h2>
-    <form th:action="@{/listSongs}" method="post">
-        <div th:each="song : ${songs}">
-            <label th:text="'Title: ' + ${song.title} + ', Genre: ' + ${song.genre} + ', Release Year: ' + ${song.releaseYear}"></label>
-            <input type="radio" name="trackId" th:value="${song.trackId}" required/>
-        </div>
-        <input type="submit" value="Submit">
+<!--    <h2>Choose a song:</h2>-->
+<!--    <form th:action="@{/listSongs}" method="post">-->
+<!--        <div th:each="song : ${songs}">-->
+<!--            <label th:text="'Title: ' + ${song.title} + ', Genre: ' + ${song.genre} + ', Release Year: ' + ${song.releaseYear}"></label>-->
+<!--            <input type="radio" name="trackId" th:value="${song.trackId}" required/>-->
+<!--        </div>-->
+<!--        <input type="submit" value="Submit">-->
+<!--    </form>-->
+
+<!--    <br>-->
+
+    <form action="/songs" method="GET">
+        <label for="albumId">Select an artist:</label>
+        <select id="albumId" name="albumId" onchange="this.form.submit()">
+            <option value="-1">None</option>
+            <option th:each="album: ${albums}" th:text="${album.name}" th:value="${album.id}" th:attr="selected=${album.id == currentAlbumId}"></option>
+        </select>
     </form>
-
-    <br>
-
     <h2>Choose a song to edit or delete:</h2>
     <div th:each="song : ${songs}">
 
