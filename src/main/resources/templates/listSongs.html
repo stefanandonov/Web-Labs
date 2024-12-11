@@ -26,7 +26,7 @@
 <!--    <br>-->
 
     <form action="/songs" method="GET">
-        <label for="albumId">Select an artist:</label>
+        <label for="albumId">Select an album:</label>
         <select id="albumId" name="albumId" onchange="this.form.submit()">
             <option value="-1">None</option>
             <option th:each="album: ${albums}" th:text="${album.name}" th:value="${album.id}" th:attr="selected=${album.id == currentAlbumId}"></option>
