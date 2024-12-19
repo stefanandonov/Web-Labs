@@ -7,6 +7,7 @@ import mk.ukim.finki.wp.lab.model.Song;
 import mk.ukim.finki.wp.lab.service.AlbumService;
 import mk.ukim.finki.wp.lab.service.ArtistService;
 import mk.ukim.finki.wp.lab.service.SongService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,12 +38,14 @@ public class SongController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String saveSong(@RequestParam String title, @RequestParam String trackId, @RequestParam String genre, @RequestParam int releaseYear, @RequestParam Long albumId, Model model) {
         songService.saveSong(trackId, title, genre, releaseYear, null, albumId);
         return "redirect:/songs";
     }
 
     @GetMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String saveSong(Model model) {
         List<Album> albums = albumService.findAll();
         model.addAttribute("albums", albums);
@@ -51,6 +54,7 @@ public class SongController {
     }
 
     @GetMapping("/edit/{songId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String editSong(@PathVariable Long songId, Model model) {
         Song currentSong = songService.findById(songId).orElse(null);
         model.addAttribute("song", currentSong);
@@ -60,6 +64,7 @@ public class SongController {
     }
 
     @PostMapping("/edit")
+    @PreAuthorize("hasRole('ADMIN')")
     public String editSong(@RequestParam String title, @RequestParam String trackId, @RequestParam String genre, @RequestParam int releaseYear, @RequestParam Long albumId, @RequestParam Long songID, Model model) {
         ;
         songService.saveSong(trackId, title, genre, releaseYear, songID, albumId);
@@ -67,6 +72,7 @@ public class SongController {
     }
 
     @PostMapping("delete/{songId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteSong(@PathVariable Long songId, Model model) {
         songService.deleteSongById(songId);
         return "redirect:/songs";

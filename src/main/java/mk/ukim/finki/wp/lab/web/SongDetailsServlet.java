@@ -36,6 +36,7 @@ public class SongDetailsServlet extends HttpServlet {
                 .buildExchange(req, resp);
 
         String trackId = req.getParameter("trackId");
+        resp.setContentType("text/html;charset=UTF-8");
         Song song = songService.findByTrackId(trackId).orElse(null);
         List<Artist> artists = new ArrayList<>();
         if (song != null) {
